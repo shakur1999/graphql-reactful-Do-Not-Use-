@@ -1,18 +1,8 @@
-// import { type } from "os";
-// import { GraphQLNonNull } from "../../../Library/Caches/typescript/2.6/node_modules/@types/graphql/type/definition";
-
 const graphql = require("graphql");
 const axios = require("axios");
 // const _ = require("lodash");
 
-const {
-    GraphQLObjectType,
-    GraphQLString,
-    GraphQLInt,
-    GraphQLSchema,
-    GraphQLList,
-    GraphQLNonNull
-} = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList, GraphQLNonNull } = graphql;
 
 // const users = [
 //     { id: "23", firstname: "Bill", age: 20},
@@ -82,16 +72,42 @@ const mutation = new GraphQLObjectType({
             type: UserType,
             args: {
                 firstname: { type: new GraphQLNonNull(GraphQLString) },
-                age: { type: new GraphQLNonNull (GraphQLInt) },
+                age: { type: new GraphQLNonNull(GraphQLInt) },
                 companyId: { type: GraphQLString }
             },
             resolve(parentValue, { firstname, age }) {
-                return axios.post('http://localhost:3000/usrs', { firstname, age })
+                return axios.post('http://localhost:3000/users', { firstname, age })
+                    .then(resp => resp.data);
+            }
+        },
+        deleteUser: {
+            type: UserType,
+            fields: {
+            args: {
+                Id: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve(parentValue, { id }) {
+                return axios.delete(`http://localhost:3000/users/${Id}`)
+                .then(resp => resp.data);
+            }
+            }
+        },
+        editUser: {
+            type: UserType,
+            fields: {
+                Id: { type: new GraphQLNonNull(GraphQLString) },
+                firstname: { type: GraphQLString },
+                age: { type: GraphQLInt },
+                companyId: { type: GraphQLString }
+
+            },
+            resolve(parentValue, args) {
+                return axios.patch(`https://localhost:3000/users/${args.id}/`, args)
                     .then(resp => resp.data);
             }
         }
     }
-})
+});
 
 const newLocal = module.exports = new GraphQLSchema({
     query: RootQuery,
