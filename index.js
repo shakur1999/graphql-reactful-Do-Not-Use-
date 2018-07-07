@@ -10,9 +10,6 @@ import App from "./components/App";
 import SongCreate from "./components/SongCreate";
 import gql from "graphql-tag";
 
-
-
-
 const cache = new InMemoryCache();
 const client = new ApolloClient({});
 
@@ -34,8 +31,3 @@ ReactDOM.render(
   <Root />,
   document.querySelector('#root')
 );
-
-
-        {/* <div>
-          <SongList />
-        </div> */}
