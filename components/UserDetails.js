@@ -13,4 +13,4 @@ class UserDetails extends Component {
 
 export default graphql (queryName, {
     options: (props) => {return { variables: { id: props.params.id } } }
-} ) 
+}) (SongDetail);
